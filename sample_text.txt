@@ -1,0 +1,1 @@
+this file contains a lot of words like hello and hello and bye and heello and bye. It exculde all punctiation,223.,2;3,2,
