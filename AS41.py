@@ -1,45 +1,60 @@
-import random
+def calculate_parity_bit(binary_number):
+    count_ones = binary_number.count('1')
 
-def generate_random_binary_string(length):
-    return ''.join(random.choice('01') for _ in range(length))
+    # If the count of ones is even, return '0' for even parity
+    if count_ones % 2 == 0:
+        return '0'
+    else:
+        return '1'
 
-def add_parity_bit(binary_string):
-    # Calculate the parity bit (even or odd parity)
-    parity_bit = '1' if binary_string.count('1') % 2 == 0 else '0'
-    return parity_bit + binary_string
+def check_answer(binary_number, answer):
+    parity_bit = calculate_parity_bit(binary_number)
+    
+    if parity_bit == answer:
+        return True
+    else:
+        return False
 
-def check_parity(binary_string, guess):
-    # Calculate the expected parity bit
-    expected_parity_bit = '1' if binary_string.count('1') % 2 == 0 else '0'
-    
-    # Check if the guess matches the expected parity
-    return guess == expected_parity_bit
+# Quiz Questions
+questions = [
+    {
+        'question': "Determine the parity bit for the following 8-bit binary number: 10101010",
+        'options': ["Odd parity bit", "Even parity bit", "No parity bit"],
+        'answer': "Even parity bit"
+    },
+    {
+        'question': "Identify whether the following 9-bit binary number has odd or even parity: 110111001",
+        'options': ["Odd parity", "Even parity"],
+        'answer': "Odd parity"
+    },
+    {
+        'question': "Find the missing bit to make the following 7-bit binary number have even parity: 110010_",
+        'options': ["1", "0"],
+        'answer': "1"
+    },
+    {
+        'question': "Determine if the following 6-bit binary number has odd or even parity: 101101",
+        'options': ["Odd parity", "Even parity"],
+        'answer': "Odd parity"
+    },
+    {
+        'question': "Find the missing bit to ensure the following 8-bit binary number has odd parity: 110011__",
+        'options': ["0", "1"],
+        'answer': "1"
+    }
+]
 
-def main():
-    num_questions = 5
+# Quiz Execution
+for i, question in enumerate(questions):
+    print(f"Question {i+1}: {question['question']}")
+    for j, option in enumerate(question['options']):
+        print(f"{chr(ord('A')+j)}) {option}")
     
-    print("Welcome to the Parity Bit Checker Quiz!")
-    print("You will be given binary strings with a parity bit, and you need to guess if the parity is even (E) or odd (O).")
+    # Take user's answer
+    user_answer = input("Your answer (A, B, C ): ")
     
-    score = 0
-    
-    for _ in range(num_questions):
-        binary_string = generate_random_binary_string(8)  # Generate a random 8-bit binary string
-        binary_string_with_parity = add_parity_bit(binary_string)
-        
-        print("\nBinary String with Parity Bit:", binary_string_with_parity)
-        guess = input("Is the parity even (E) or odd (O)? ").strip().upper()
-        
-        if guess == 'E' or guess == 'O':
-            if check_parity(binary_string, guess):
-                print("Correct! The parity is", guess)
-                score += 1
-            else:
-                print("Incorrect! The correct answer is", 'E' if binary_string.count('1') % 2 == 0 else 'O')
-        else:
-            print("Invalid input. Please enter 'E' for even or 'O' for odd parity.")
-    
-    print("\nQuiz completed! Your score:", score, "out of", num_questions)
-
-if __name__ == "__main__":
-    main()
+    # Check if the answer is correct
+    if check_answer(question['answer'], user_answer):
+        print("Correct!\n")
+    else:
+        print(f"Wrong Answer. The correct answer is {question['answer']}.\n")
