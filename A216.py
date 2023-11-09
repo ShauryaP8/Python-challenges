@@ -1,33 +1,30 @@
 from collections import defaultdict
 
+def load_word_list(url):
+    import requests
+    response = requests.get(url)
+    words = response.text.splitlines()
+    return words
+
 def find_anagrams(word_list):
-    anagram_groups = defaultdict(list)
-
-    # Group words by their sorted characters
+    anagrams = defaultdict(list)
     for word in word_list:
-        sorted_word = ''.join(sorted(word))
-        anagram_groups[sorted_word].append(word)
+        key = ''.join(sorted(word))
+        anagrams[key].append(word)
+    return anagrams
 
-    # Find the groups with the most words
-    max_group_size = max(len(group) for group in anagram_groups.values())
-    max_groups = [group for group in anagram_groups.values() if len(group) == max_group_size]
+def find_anagram_set(word, anagram_dict):
+    key = ''.join(sorted(word))
+    return anagram_dict.get(key, [])
 
-    return max_groups
+url = 'http://www.puzzlers.org/pub/wordlists/unixdict.txt'
 
-if __name__ == '__main__':
-    # Read the word list from the provided URL
-    import urllib.request
-    url = 'https://gist.githubusercontent.com/jamesabela/d956da0889582e5c5c8fc34ed72b97c3/raw/6ef9a8845bf42de2ce1e51d7f70c72f0d8333526/wordlist.txt'
-    word_list = urllib.request.urlopen(url).read().decode().split()
+word_list = load_word_list(url)
 
-    # Find anagrams for a given word
-    input_word = input("Enter a word to find its anagrams: ").lower()
-    groups = find_anagrams(word_list)
+anagagram_sets = find_anagrams(word_list)
 
-    anagram_groups = [group for group in groups if input_word in group]
-    if anagram_groups:
-        print(f"The word '{input_word}' has the following anagrams:")
-        for group in anagram_groups:
-            print(group)
-    else:
-        print(f"No anagrams found for the word '{input_word}'.")
+max_size = max(len(words) for words in anagagram_sets.values())
+largest_anagrams = [words for words in anagagram_sets.values() if len(words) == max_size]
+
+for anagram_set in largest_anagrams:
+    print(anagram_set)
